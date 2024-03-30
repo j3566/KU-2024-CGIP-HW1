@@ -51,8 +51,8 @@ Vec3 computePixel(Shape* hitShape, HitInfo& hitInfo, Vec3& rayDirection)
     {
         pixel = ambient;
     }
-	else
-	{
+    else
+    {
         float diffuseIntensity = std::max(0.0f, normalizeLightDirection.dot(hitShapeNormal));
         Vec3 diffuse = hitShape->kd * g_lightIntensity * diffuseIntensity;
 
@@ -75,8 +75,8 @@ void render() {
 
     // 각 픽셀에 대해 체크
     for (int y= 0; y < g_height; y++) 
-	{
-    	for (int x = 0; x < g_width; x++) {
+    {
+        for (int x = 0; x < g_width; x++) {
 
             float u = g_l + (g_r - g_l) * (x + 0.5) / g_width;
             float v = g_b + (g_t - g_b) * (y + 0.5) / g_height;
@@ -86,14 +86,14 @@ void render() {
 
             Shape* hitShape = NULL;
             HitInfo hitInfo = {};
-			float min = -1;
+            float min = -1;
 
             for (const auto& shape : g_shapeList) 
-			{
+            {
                 HitInfo shapeHitInfo = shape->intersect(eye, rayDirection);
                 if (shapeHitInfo.hit && ( min < 0 || shapeHitInfo.distance < min ) )
-				{
-					min = shapeHitInfo.distance;
+                {
+                    min = shapeHitInfo.distance;
                     hitInfo = shapeHitInfo;
                     hitShape = shape.get();
                 }
@@ -103,7 +103,7 @@ void render() {
             {
                 pixels[y * g_width + x] = computePixel(hitShape, hitInfo, rayDirection);
             }
-    		else
+            else
             {
                 pixels[y * g_width + x] = Vec3(0, 0, 0);
             }
@@ -133,17 +133,17 @@ int main(int argc, char** argv) {
     glutInitWindowSize(g_width, g_height);
     glutInitWindowPosition(100, 100);
 
-	g_shapeList.push_back(std::make_unique<Plane>(
+    g_shapeList.push_back(std::make_unique<Plane>(
         Vec3(0, -2, 0), Vec3(0, 1, 0),
         Vec3(0.2, 0.2, 0.2), Vec3(1, 1, 1), Vec3(0, 0, 0), 0
     ));
-	g_shapeList.push_back(std::make_unique<Sphere>(Vec3(-4, 0, -7), 1,
+    g_shapeList.push_back(std::make_unique<Sphere>(Vec3(-4, 0, -7), 1,
         Vec3(0.2, 0, 0), Vec3(1, 0, 0), Vec3(0, 0, 0), 0
     ));
-	g_shapeList.push_back(std::make_unique<Sphere>(Vec3(0, 0, -7), 2,
+    g_shapeList.push_back(std::make_unique<Sphere>(Vec3(0, 0, -7), 2,
         Vec3(0, 0.2, 0), Vec3(0, 0.5, 0), Vec3(0.5, 0.5, 0.5), 32
     ));
-	g_shapeList.push_back(std::make_unique<Sphere>(Vec3(4, 0, -7), 1,
+    g_shapeList.push_back(std::make_unique<Sphere>(Vec3(4, 0, -7), 1,
         Vec3(0, 0, 0.2), Vec3(0, 0, 1), Vec3(0, 0, 0), 0
     ));
 

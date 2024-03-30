@@ -53,13 +53,13 @@ struct HitInfo {
     float distance;
     Vec3 point;
 
-	HitInfo(bool hit = false, float distance = -1, Vec3 point = NULL) : hit(hit), distance(distance), point(point) {}
+    HitInfo(bool hit = false, float distance = -1, Vec3 point = NULL) : hit(hit), distance(distance), point(point) {}
 };
 
 
 class Shape {
 
-	public:
+    public:
 
         Vec3 ka;
         Vec3 kd;
@@ -72,7 +72,7 @@ class Shape {
         Shape(const Vec3& ka, const Vec3& kd, const Vec3& ks, float specularPower)
             : ka(ka), kd(kd), ks(ks), specularPower(specularPower) {}
 
-	    virtual HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const = 0;
+        virtual HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const = 0;
 
         virtual Vec3 getNormalVector(Vec3& point) const = 0;
 
@@ -80,19 +80,19 @@ class Shape {
 
 class Sphere : public Shape {
 
-	private:
-	    Vec3 center;
-	    float radius;
+    private:
+        Vec3 center;
+        float radius;
 
-	public:
-	    Sphere(const Vec3& center, float radius) : center(center), radius(radius) {}
+    public:
+        Sphere(const Vec3& center, float radius) : center(center), radius(radius) {}
 
         Sphere(const Vec3& center, float radius,
             const Vec3& ka, const Vec3& kd, const Vec3& ks, float specularPower) :
             Shape( ka, kd, ks, specularPower),
             center(center), radius(radius) {}
 
-	    HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const override {
+        HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const override {
 
             Vec3 oc = rayOrigin - center;
             Vec3 rn = rayDirection.normalize();
@@ -128,7 +128,7 @@ class Sphere : public Shape {
                     return {};
                 }
             }
-	    }
+        }
 
         Vec3 getNormalVector(Vec3& point) const override
         {
@@ -138,9 +138,9 @@ class Sphere : public Shape {
 
 class Plane : public Shape {
 
-	private:
-	    Vec3 point;
-	    Vec3 normal;
+    private:
+        Vec3 point;
+        Vec3 normal;
 
         Vec3 ka;
         Vec3 kd;
@@ -148,32 +148,32 @@ class Plane : public Shape {
 
         float specularPower;
 
-	public:
+    public:
 
         Plane(const Vec3& point, const Vec3& normal,
             const Vec3& ka, const Vec3& kd, const Vec3& ks, float specularPower) :
             Shape(ka, kd, ks, specularPower),
-			point(point), normal(normal.normalize()) {}
+            point(point), normal(normal.normalize()) {}
 
-	    Plane(const Vec3& point, const Vec3& normal) : point(point), normal(normal.normalize()) {}
+        Plane(const Vec3& point, const Vec3& normal) : point(point), normal(normal.normalize()) {}
 
-	    HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const override {
+        HitInfo intersect(const Vec3& rayOrigin, const Vec3& rayDirection) const override {
 
-	        float denom = normal.dot(rayDirection);
+            float denom = normal.dot(rayDirection);
 
-	        if (std::abs(denom) > 1e-6) {
+            if (std::abs(denom) > 1e-6) {
 
-	            Vec3 pr = point - rayOrigin;
-	            float t = pr.dot(normal) / denom;
-	            if (t >= 0) {
-	                return {true, t, rayOrigin + rayDirection.normalize() * t };
-	            }
-	        }
+                Vec3 pr = point - rayOrigin;
+                float t = pr.dot(normal) / denom;
+                if (t >= 0) {
+                    return {true, t, rayOrigin + rayDirection.normalize() * t };
+                }
+            }
 
-	        return {};
-	    }
+            return {};
+        }
 
-		Vec3 getNormalVector(Vec3& point) const override
+        Vec3 getNormalVector(Vec3& point) const override
         {
             return normal;
         }
