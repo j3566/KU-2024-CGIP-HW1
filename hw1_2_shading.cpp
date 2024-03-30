@@ -1,6 +1,4 @@
 
-#include <iostream>
-
 #include "commons.h"
 
 std::vector<std::unique_ptr<Shape>> g_shapeList;
